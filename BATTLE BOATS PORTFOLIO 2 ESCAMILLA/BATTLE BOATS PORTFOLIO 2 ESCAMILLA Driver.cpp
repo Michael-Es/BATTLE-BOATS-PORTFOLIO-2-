@@ -1,27 +1,99 @@
-#include <iostream>
-#include <cassert>
+﻿#include <iostream>
 #include <sstream>
 #include <array>
+#include "BATTLE BOATS BOT HEADER.h"
 #include "BATTLE BOATS PORTFOLIO 2 ESCAMILLA Header.h"
 
 
 using namespace std;
 
+
+void displayBothGrids(BattleBoatsGrid& playerGrid, BattleBoatsGrid& guessGrid) {
+    std::stringstream left(playerGrid.display());
+    std::stringstream right(guessGrid.display());
+
+    std::string leftLine, rightLine;
+    std::cout << "\nYou:                Computer:\n\n";
+
+    while (std::getline(left, leftLine) && std::getline(right, rightLine)) {
+        std::cout << leftLine << "\t   " << rightLine << "\n";
+    }
+}
 int main() {
-cout << "Welcome to Battle Boats" << endl;
+    srand(static_cast<unsigned int>(time(0))); 
+    char playAgain;
 
-BattleBoatsGrid grid;
+    do {
+        cout << "Welcome to Battle Boats!" << endl;
 
-string boatPosition = getValidCoordinate();
-grid.addBoat(boatPosition);
+        BattleBoatsGrid playerGrid;
+        BattleBoatsGrid computerGrid;
+        BattleBoatsGrid playerGuessGrid;
 
-cout << "This is your boat location!" << endl;
-cout << grid.display();
+        string symbol = getValidBoatSymbol();  
+        playerGrid.setBoatSymbol(symbol);
 
+        cout << "\nWhere would you like to hide your boat?\n";
+        string playerBoat = getValidCoordinate();
+        playerGrid.addBoat(playerBoat);
 
-string shot = getValidCoordinate();
-grid.fireShot(shot);
+        computerGrid.setBoatSymbol("@");
+        string computerBoat = placeComputerBoat();
+        computerGrid.addBoat(computerBoat);
 
-cout << "After firing a shot!" << endl;
-cout << grid.display();
+        cout << "\nGreat! Let's begin!" << endl;
+
+        vector<string> computerGuesses;
+        bool gameOver = false;
+
+        while (!gameOver) {
+            displayBothGrids(playerGrid, playerGuessGrid);
+
+            cout << "\nPick a spot to fire! ";
+            string playerShot = getValidCoordinate();
+            cout << "\nYou chose " << playerShot << ". ";
+
+            if (playerShot == computerBoat) {
+                cout << "Hit!\n\nYou sunk the boat! Great job, you win!\n";
+                playerGuessGrid.fireShot(playerShot);
+                gameOver = true;
+            }
+            else {
+                cout << "You missed!" << endl;
+                playerGuessGrid.fireShot(playerShot);
+            }
+
+            if (!gameOver) {
+                string compShot = computerGuess(computerGuesses);
+                cout << "\nThe enemy chose " << compShot << ". ";
+
+                if (compShot == playerBoat) {
+                    cout << "They hit your boat!\n\nYou lose!\n\nThe Enemy Wins!" << endl;
+                    playerGrid.fireShot(compShot);
+                    gameOver = true;
+                }
+                else {
+                    cout << "They missed!" << endl;
+                    playerGrid.fireShot(compShot);
+                }
+            }
+        }
+
+        cout << "\n--- Final Grids ---" << endl;
+        displayBothGrids(playerGrid, playerGuessGrid);
+
+        
+        do {
+            cout << "\nWould you like to play again? (Y/N): ";
+            cin >> playAgain;
+            playAgain = toupper(playAgain);
+
+            if (playAgain != 'Y' && playAgain != 'N') {
+                cout << "Invalid input. Please enter Y or N." << endl;
+            }
+        } while (playAgain != 'Y' && playAgain != 'N');
+
+    } while (playAgain == 'Y');
+
+    return 0;
 }

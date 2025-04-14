@@ -129,9 +129,11 @@
   <ItemGroup>
     <ClCompile Include="BATTLE BOATS PORTFOLIO 2 ESCAMILLA Driver.cpp" />
     <ClCompile Include="BATTLE BOATS PORTFOLIO 2 ESCAMILLA Source.cpp" />
+    <ClCompile Include="BATTLE BOATS BOT Source.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BATTLE BOATS PORTFOLIO 2 ESCAMILLA Header.h" />
+    <ClInclude Include="BATTLE BOATS BOT HEADER.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

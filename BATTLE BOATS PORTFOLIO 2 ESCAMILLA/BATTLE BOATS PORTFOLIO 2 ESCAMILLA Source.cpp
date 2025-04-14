@@ -11,6 +11,10 @@ BattleBoatsGrid::BattleBoatsGrid() {
     }
 }
 
+void BattleBoatsGrid::setBoatSymbol(std::string symbol) {
+    boatSymbol = symbol;
+}
+
 std::string BattleBoatsGrid::generateRow(std::string letter, int index) {
     return letter + "\t" + rowValues[index][0] + " " + rowValues[index][1] + " " + rowValues[index][2] + " " + rowValues[index][3] + "\n";
 }
@@ -27,7 +31,7 @@ void BattleBoatsGrid::addBoat(std::string coordinate) {
     else if (coordinate.at(0) == 'D') rowValue = 3;
 
     int columnValue = coordinate.at(1) - '0' - 1;
-    rowValues[rowValue][columnValue] = "@";
+    rowValues[rowValue][columnValue] = boatSymbol;  
 }
 
 void BattleBoatsGrid::fireShot(std::string coordinate) {
@@ -51,8 +55,7 @@ std::string BattleBoatsGrid::display() {
     return ss.str();
 }
 
-
-string getValidCoordinate() { // Validation
+string getValidCoordinate() { // Validation for selecting where to place your boat
     string coordinate;
     bool valid = false;
 
@@ -75,4 +78,27 @@ string getValidCoordinate() { // Validation
     }
 
     return coordinate;
+}
+
+bool isValidBoatSymbol(char symbol) { //Validation for boat symbol
+    return symbol == '@' || symbol == '$' || symbol == '%' || symbol == '&';
+}
+
+std::string getValidBoatSymbol() {
+    char symbol;
+    bool valid = false;
+
+    while (!valid) {
+        std::cout << "Choose a symbol for your boat (@, $, %, &): ";
+        std::cin >> symbol;
+
+        if (isValidBoatSymbol(symbol)) {
+            valid = true;
+        }
+        else {
+            std::cout << "Invalid symbol. Please choose one of (@, $, %, &).\n";
+        }
+    }
+
+    return std::string(1, symbol);
 }
